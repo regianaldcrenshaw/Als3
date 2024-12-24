@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cash Register POS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+        }
+        .total, .actions {
+            margin-top: 20px;
+            text-align: right;
+        }
+        button {
+            margin: 5px 0;
+            width: 100%;
+        }
+        .items {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .items button {
+            flex: 1 1 30%;
+            margin: 5px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Cash Register POS</h2>
+        <div class="items" id="items">
+            <script>
+                const items = [
+                    { name: 'Item 1', price: 2.0 },
+                    { name: 'Item 2', price: 3.5 },
+                    { name: 'Item 3', price: 1.75 },
+                    { name: 'Item 4', price: 4.0 },
+                    { name: 'Item 5', price: 2.5 },
+                    { name: 'Item 6', price: 3.0 },
+                    { name: 'Item 7', price: 5.0 },
+                    { name: 'Item 8', price: 6.5 },
+                    { name: 'Item 9', price: 2.25 },
+                    { name: 'Item 10', price: 1.5 },
+                    { name: 'Item 11', price: 4.75 },
+                    { name: 'Item 12', price: 3.25 },
+                    { name: 'Item 13', price: 2.75 },
+                    { name: 'Item 14', price: 5.5 },
+                    { name: 'Item 15', price: 6.0 },
+                    { name: 'Item 16', price: 7.0 },
+                    { name: 'Item 17', price: 8.5 },
+                    { name: 'Item 18', price: 9.0 },
+                    { name: 'Item 19', price: 1.25 },
+                    { name: 'Item 20', price: 2.5 },
+                    { name: 'Item 21', price: 3.75 },
+                    { name: 'Item 22', price: 4.25 },
+                    { name: 'Item 23', price: 5.75 },
+                    { name: 'Item 24', price: 6.25 },
+                    { name: 'Item 25', price: 7.5 },
+                    { name: 'Item 26', price: 8.0 },
+                    { name: 'Item 27', price: 9.5 },
+                    { name: 'Item 28', price: 10.0 },
+                    { name: 'Item 29', price: 1.5 },
+                    { name: 'Item 30', price: 2.0 },
+                    { name: 'Item 31', price: 3.0 },
+                    { name: 'Item 32', price: 4.0 }
+                ];
+
+                items.forEach((item, index) => {
+                    document.write(`
+                        <button onclick="addItem(${index})">${item.name} ($${item.price.toFixed(2)})</button>
+                    `);
+                });
+            </script>
+        </div>
+        <div class="total">
+            <h3>Total: $<span id="total">0.00</span></h3>
+        </div>
+        <div class="actions">
+            <button onclick="applyDiscount()">Apply 10% Discount</button>
+            <button onclick="copyOrder()">Copy Order</button>
+            <button onclick="clearOrder()">Clear Order</button>
+        </div>
+    </div>
+
+    <script>
+        const order = Array(32).fill(0); // Initialize order quantities for each item
+
+        function addItem(index) {
+            order[index]++;
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            let total = 0;
+            for (let i = 0; i < order.length; i++) {
+                total += order[i] * items[i].price;
+            }
+            document.getElementById('total').innerText = total.toFixed(2);
+        }
+
+        function applyDiscount() {
+            let total = parseFloat(document.getElementById('total').innerText);
+            total *= 0.9;
+            document.getElementById('total').innerText = total.toFixed(2);
+        }
+
+        function copyOrder() {
+            let orderText = 'Order Summary:\n';
+            for (let i = 0; i < order.length; i++) {
+                if (order[i] > 0) {
+                    orderText += `${items[i].name}: ${order[i]} x $${items[i].price.toFixed(2)}\n`;
+                }
+            }
+            orderText += `Total: $${document.getElementById('total').innerText}`;
+            navigator.clipboard.writeText(orderText).then(() => {
+                alert('Order copied to clipboard!');
+            });
+        }
+
+        function clearOrder() {
+            for (let i = 0; i < order.length; i++) {
+                order[i] = 0;
+            }
+            document.getElementById('total').innerText = '0.00';
+        }
+    </script>
+</body>
+</html>
